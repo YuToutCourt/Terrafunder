@@ -1,0 +1,21 @@
+§4 -> Dark Red
+§c -> Red
+§6 -> Orange / Gold
+§e -> Yellow
+§2 -> Dark Green
+§a -> Green / Lime
+§b -> Light Blue
+§3 -> Aqua
+§1 -> Dark Blue
+§9 -> Blue
+§d -> Light Purple / Pink
+§5 -> Purple
+§f -> White
+§7 -> Grey
+§8 -> Dark Grey
+§0 -> Black
+§k -> Magick
+§l -> Bold
+§m -> Underline
+§n -> Italic
+§r -> Reset

@@ -1,0 +1,18 @@
+name: Terrafudner
+version: ${project.version}
+main: com.terrafunder.terrafunder.Terrafunder
+api-version: 1.0
+
+commands:
+  alert:
+    description: Create a broadcast message
+    usage: /alert <message>
+    permission: perm.use
+  start:
+    description: start the game
+    usage: /start
+    permission: perm.use
+  rule:
+    description: Show the rule of the game
+    usage: /rule <1 -> 7>
+    permission: perm.use

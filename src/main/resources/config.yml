@@ -1,0 +1,45 @@
+Spawn: # Spawn coordinates ✔️
+  x: 0   # int x coordinate
+  y: 250 # int y coordinate
+  z: 0   # int z coordinate
+
+World: #✔️
+  WorldName: "world" # Name of the world played in
+  EnableFireSpreading: false # Stop the fire to spread (doFireTick gamerule)
+  BadWeather: false # Bad weather (rain) disabled if set to false
+
+NotchApple: false # Allow or not notch apples ✔️
+LevelTwoPotions: false # Allow or not potion of level 2 ✔️
+StrenghtPotions: false # Allow or not strenght potion ✔️
+ProjectilesKnockback: false # Allow or not fishing rod, snowball and eggs knockback for PvP ✔️
+AllowNether: true # Allow or not the nether ✔️
+AllowHorse: true # Allow or not horses ✔️
+FireAndFlame: true # Allow or not fire aspect and flame enchantments ✔️
+CutClean: true # Enable or not the Cut Clean scenario (autosmelting items) ✔️
+
+Teams: #✔️
+  TeamChat: true # Enable or not team chat
+  FriendlyFire : true # Enable or not the friendlyfire
+  Teams: # color,name,data - splitted by comma (The name of the Defenseur tame sould never change)
+    - "GOLD,Defenseur"
+    - "YELLOW,Yellow"
+    - "DARK_GREEN,Dark Green"
+    - "GREEN,Green"
+    - "AQUA,Aqua"
+    - "DARK_BLUE,Dark Blue"
+    - "BLUE,Blue"
+    - "RED,Red"
+    - "LIGHT_PURPLE,Pink"
+    - "DARK_PURPLE,Purple"
+    - "GRAY,Gray"
+    - "WHITE,White"
+    - "DARK_RED,Dark Red"
+
+Invicibility: 30 # Invicibility time at the start of the game, in seconds ✔️
+TimeBeforePvp: 3 # Time in days before PVP is enable ✔️
+
+Border: #✔️
+  StartSize: 2000 # Initial size (width) of the border
+  TimeBeforeMoving: 60 # Amount of time in minutes before the border starts moving
+  EndSize: 500 # Final size of the border
+  MovingDuration: 1200 # Moving time of the border in seconds
