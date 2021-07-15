@@ -1,5 +1,6 @@
 package com.terrafunder.terrafunder.Timer;
 
+import com.terrafunder.terrafunder.Team.Teams;
 import com.terrafunder.terrafunder.Terrafunder;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
@@ -11,7 +12,7 @@ public class TimerTasks extends BukkitRunnable {
 
     public static boolean RUN = false;
     public static int day = 1;
-    private static int time = 0;
+    public static int time = 0;
 
     public static int WBtime = 0;
     private int WBstate = 0;
@@ -40,7 +41,7 @@ public class TimerTasks extends BukkitRunnable {
             }
             if(time%1200 == 0) day++;
 
-            if(day == 3) { // turn pvp on
+            if(day == 3 && !this.main.WORLD.getPVP()) { // turn pvp on
                 this.main.WORLD.setPVP(true);
                 this.main.WORLD.playSound(this.main.WORLD.getSpawnLocation(), Sound.WOLF_GROWL, 1000.0F, 1.0F);
                 Bukkit.broadcastMessage("§c§lPvP is now enable!");
@@ -80,8 +81,8 @@ public class TimerTasks extends BukkitRunnable {
         for(FastBoard board : this.main.boards) {
             board.updateLine(1, formatTime(time, true));
             board.updateLine(3, formatLine("Jour",day));
-            board.updateLine(5, formatLine("Defenseur",1));
-            board.updateLine(6, formatLine("Attaquant",1));
+            board.updateLine(5, formatLine(Teams.getColorTeamDef()+"Defenseur", Teams.nbDefenseur()));
+            board.updateLine(6, formatLine(Teams.getTeamOf(board.getPlayer()).getColor()+"Attaquant",Teams.nbAttacker()));
             board.updateLine(8, formatLine("Border", formatTime(WBtime, false)));
             board.updateLine(9, formatLine("Size", (int)this.main.WORLD.getWorldBorder().getSize()));
         }

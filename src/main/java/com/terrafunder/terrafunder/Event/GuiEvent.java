@@ -22,7 +22,7 @@ public class GuiEvent implements Listener {
         if (item.getType() == Material.CHEST && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Sélecteur de team")){
             Inventory inv = Bukkit.createInventory(null, 45, "§6Sélecteur de team");
             for(int i = 0; i< Teams.teams.size(); i++){
-                ItemStack banner = new ItemStack(Material.BANNER);
+                ItemStack banner = new ItemStack(Material.BANNER,1,Teams.teams.get(i).getData());
                 ItemMeta itemMeta = banner.getItemMeta();
                 itemMeta.setDisplayName(Teams.teams.get(i).getColor() + "Rejoignez la Team " + Teams.teams.get(i).getName());
                 banner.setItemMeta(itemMeta);
@@ -33,20 +33,24 @@ public class GuiEvent implements Listener {
 
     }
     @EventHandler
-    public void onClick(InventoryClickEvent event)
-    {
+    public void onClick(InventoryClickEvent event) {
         Inventory inv = event.getInventory();
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
         if (current == null) return;
-        if (inv.getName().equalsIgnoreCase("§6Sélecteur de team"))
-        {
-            event.setCancelled(true);
-            if(current.getType() == Material.BANNER && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.GOLD+ "Rejoignez la Team " + "DEFENSEUR"))
-            {
-                player.closeInventory();
+        // CANCEL PLAYER TO TAKE THE ITEM IN THE INV
+        if (inv.getName().equalsIgnoreCase("§6Sélecteur de team")) {
+            if(current != null && current.getType().equals(Material.BANNER)){
+                for(Teams team : Teams.teams){
+                    if (team.getData() == current.getData().getData()){
+                        Teams.addPlayer(player,team);
+                        player.sendMessage(team.getColor()+ "Tu a rejoin la team " + team.getName());
+                    }
+                }
             }
+            event.setCancelled(true);
         }
+
     }
 
 }

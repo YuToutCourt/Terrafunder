@@ -28,15 +28,16 @@ public class DeathEvent implements Listener {
         this.main.WORLD.playSound(deathLocation, Sound.ZOMBIE_REMEDY, 1000.0F, 1.0F);
 
         if (!(killer instanceof Player)) {
-            event.setDeathMessage("§c§l† " + Teams.getTeamOf(victim) + victim.getDisplayName() + " est mort PVE comme une merde, sa Team l'a bannie §c§l†");
+            event.setDeathMessage("§c§l† " + Teams.getTeamOf(victim).getColor() + victim.getDisplayName() + " est mort PVE comme une merde, sa Team l'a bannie §c§l†");
         }
         else {
-            event.setDeathMessage("§c§l† " + Teams.getTeamOf(victim) + victim.getDisplayName() + ChatColor.RED + " §là était tuer par " + Teams.getTeamOf(killer) + killer.getDisplayName() + " §c§l†");
+            event.setDeathMessage("§c§l† " + Teams.getTeamOf(victim).getColor() + victim.getDisplayName() + ChatColor.RED + " §là était tuer par " + Teams.getTeamOf(killer).getColor() + killer.getDisplayName() + " §c§l†");
             if(Teams.getTeamOf(victim).getName().equals("Defenseur") && !defenderDeath){
                 defenderDeath = true;
                 Bukkit.broadcastMessage("§c§l† §eUn §6défenseur §eest mort. Les §f§lattaquants §epeuvent prendre le bloc §ad'émeraude §esi on et minimum jours 4 §c§l†");
             }
         }
+        Teams.removePlayer(victim);
 
     }
 

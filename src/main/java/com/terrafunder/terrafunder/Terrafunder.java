@@ -2,6 +2,7 @@ package com.terrafunder.terrafunder;
 
 import com.terrafunder.terrafunder.Command.AlertCommand;
 import com.terrafunder.terrafunder.Command.RuleCommand;
+import com.terrafunder.terrafunder.Command.SetTimeCommand;
 import com.terrafunder.terrafunder.Command.StartCommand;
 import com.terrafunder.terrafunder.Event.*;
 import com.terrafunder.terrafunder.Team.Teams;
@@ -34,6 +35,7 @@ public final class Terrafunder extends JavaPlugin{
         this.getCommand("alert").setExecutor(new AlertCommand());
         this.getCommand("start").setExecutor(new StartCommand(this));
         this.getCommand("rule").setExecutor(new RuleCommand());
+        this.getCommand("settime").setExecutor(new SetTimeCommand());
 
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new ChatEvent(this), this);
@@ -66,7 +68,7 @@ public final class Terrafunder extends JavaPlugin{
         for(int i = 0; i < teams.size(); i++) {
             String currentTeam = teams.get(i);
             String[] splitTeam = currentTeam.split(",");
-            Teams.teams.add(new Teams(splitTeam[1],splitTeam[0]));
+            Teams.teams.add(new Teams(splitTeam[1],splitTeam[0],splitTeam[2]));
         }
 
         // Reset timers
@@ -113,7 +115,7 @@ public final class Terrafunder extends JavaPlugin{
     public FastBoard createBoard(Player player) {
         String SEPARATOR = ChatColor.RED + "";
         FastBoard board = new FastBoard(player);
-        board.updateTitle(ChatColor.DARK_GREEN + "§lTerraFunder");
+        board.updateTitle(ChatColor.DARK_GREEN + "Terra§a§lFunder");
 
         List<String> lines = new ArrayList<String>();
         lines.add(SEPARATOR);
@@ -121,7 +123,7 @@ public final class Terrafunder extends JavaPlugin{
         lines.add(SEPARATOR);
         lines.add(TimerTasks.formatLine("Day", 0));
         lines.add(SEPARATOR);
-        lines.add(TimerTasks.formatLine("Defenseur", 0));
+        lines.add(TimerTasks.formatLine(Teams.getColorTeamDef()+"Defenseur", 0));
         lines.add(TimerTasks.formatLine("Attaquant", 0));
         lines.add(SEPARATOR);
         lines.add(TimerTasks.formatLine("Border", TimerTasks.formatTime(0, false)));

@@ -16,3 +16,7 @@ commands:
     description: Show the rule of the game
     usage: /rule <1 -> 7>
     permission: perm.use
+  settime:
+    description: Set the current time to <time> in minutes
+    usage: /settime <time>
+    permission: perm.use

@@ -2,6 +2,7 @@ package com.terrafunder.terrafunder.Event;
 
 import com.terrafunder.terrafunder.Team.Teams;
 import com.terrafunder.terrafunder.Terrafunder;
+import com.terrafunder.terrafunder.Timer.TimerTasks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,18 +21,25 @@ public class ChatEvent implements Listener {
     public void onMessage(AsyncPlayerChatEvent event){
         Player playerSender = event.getPlayer();
         String message = event.getMessage();
-        if(this.main.CONFIG.getBoolean("Teams.TeamChat") && message.charAt(0) == '!'){
-            event.setCancelled(true);
-            for(Player p : Bukkit.getOnlinePlayers()){
-                if(Teams.getTeamOf(p).equals(Teams.getTeamOf(playerSender))){
-                    p.sendMessage(Teams.getTeamOf(p).getColor() + "[" + Teams.getTeamOf(p).getName() + "] "+ playerSender.getName()+ "§4->"+ formatMessage(message));
+
+        // If the player have no team
+        if(Teams.getTeamOf(playerSender) == null){
+            event.setFormat("§4<- §r"+playerSender.getDisplayName() + " §4-> §r" + message);
+        }else {
+            if(this.main.CONFIG.getBoolean("Teams.TeamChat") && message.charAt(0) == '!'){
+                event.setCancelled(true);
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    if(Teams.getTeamOf(p).equals(Teams.getTeamOf(playerSender))){
+                        p.sendMessage(Teams.getTeamOf(p).getColor() + "[" + Teams.getTeamOf(p).getName() + "] "+ playerSender.getName()+ "§4 ->"+ Teams.getTeamOf(playerSender).getColor() + formatMessage(message));
+                    }
                 }
             }
+            else{
+                event.setFormat("§4<- "+Teams.getTeamOf(playerSender).getColor() +  playerSender.getDisplayName() + " §4-> " + Teams.getTeamOf(playerSender).getColor() + message); // DarkRed <- ColorTeam DarkRed-> ColorTeam <message>
+            }
         }
-        else{
-            event.setFormat("§4<- "+Teams.getTeamOf(playerSender).getColor() +  playerSender.getDisplayName() + " §4-> " + message); // DarkRed <- ColorTeam DarkRed-> ColorTeam <message>
 
-        }
+
     }
 
     private String formatMessage(String message){

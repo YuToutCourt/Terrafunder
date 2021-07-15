@@ -21,19 +21,17 @@ Teams: #✔️
   TeamChat: true # Enable or not team chat
   FriendlyFire : true # Enable or not the friendlyfire
   Teams: # color,name,data - splitted by comma (The name of the Defenseur tame sould never change)
-    - "GOLD,Defenseur"
-    - "YELLOW,Yellow"
-    - "DARK_GREEN,Dark Green"
-    - "GREEN,Green"
-    - "AQUA,Aqua"
-    - "DARK_BLUE,Dark Blue"
-    - "BLUE,Blue"
-    - "RED,Red"
-    - "LIGHT_PURPLE,Pink"
-    - "DARK_PURPLE,Purple"
-    - "GRAY,Gray"
-    - "WHITE,White"
-    - "DARK_RED,Dark Red"
+    - "GOLD,Defenseur,14"
+    - "YELLOW,Yellow,11"
+    - "DARK_GREEN,Dark Green,2"
+    - "GREEN,Green,10"
+    - "AQUA,Aqua,12"
+    - "BLUE,Blue,4"
+    - "RED,Red,1"
+    - "LIGHT_PURPLE,Pink,9"
+    - "DARK_PURPLE,Purple,13"
+    - "GRAY,Gray,8"
+    - "WHITE,White,15"
 
 Invicibility: 30 # Invicibility time at the start of the game, in seconds ✔️
 TimeBeforePvp: 3 # Time in days before PVP is enable ✔️
