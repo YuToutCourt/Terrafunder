@@ -40,3 +40,8 @@ Border: #✔️
   TimeBeforeMoving: 6 # Amount of day before the border starts moving
   EndSize: 500 # Final size of the border
   MovingDuration: 1200 # Moving time of the border in seconds
+
+Mode:
+  NoobMode: false # This mode will prevent players from dying before pvp (The difficulty of the game will be easy and NaturelReneration true)
+  NormalMode : true # difficulty normal and NaturelReneration true
+  HardMode : false # difficulty hard NaturelReneration false
