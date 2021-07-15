@@ -38,6 +38,10 @@ public class DeathEvent implements Listener {
             }
         }
         Teams.removePlayer(victim);
+        if(Teams.nbDefenseur() == 0){
+            Bukkit.broadcastMessage("§c§l† §eIl y a plus de "+ Teams.getColorTeamDef() + "Défenseur §eLes §f§lattaquants §epeuvent prendre le bloc §ad'émeraude §esi on et minimum jours 4 §c§l†");
+
+        }
 
     }
 

@@ -2,7 +2,7 @@ package com.terrafunder.terrafunder;
 
 import com.terrafunder.terrafunder.Command.AlertCommand;
 import com.terrafunder.terrafunder.Command.RuleCommand;
-import com.terrafunder.terrafunder.Command.SetTimeCommand;
+import com.terrafunder.terrafunder.Command.SetDayCommand;
 import com.terrafunder.terrafunder.Command.StartCommand;
 import com.terrafunder.terrafunder.Event.*;
 import com.terrafunder.terrafunder.Team.Teams;
@@ -35,7 +35,7 @@ public final class Terrafunder extends JavaPlugin{
         this.getCommand("alert").setExecutor(new AlertCommand());
         this.getCommand("start").setExecutor(new StartCommand(this));
         this.getCommand("rule").setExecutor(new RuleCommand());
-        this.getCommand("settime").setExecutor(new SetTimeCommand());
+        this.getCommand("setday").setExecutor(new SetDayCommand());
 
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new ChatEvent(this), this);
@@ -44,6 +44,7 @@ public final class Terrafunder extends JavaPlugin{
         pm.registerEvents(new BlockBreakEmerald(),this);
         pm.registerEvents(new DeathEvent(this),this);
         pm.registerEvents(new GuiEvent(),this);
+        pm.registerEvents(new WinEvent(),this);
         if(CONFIG.getBoolean("CutClean")) pm.registerEvents(new CutCleanEvent(), this);
         if(!CONFIG.getBoolean("World.BadWeather")) pm.registerEvents(new RainEvent(), this);
         this.resetGame();
@@ -73,8 +74,6 @@ public final class Terrafunder extends JavaPlugin{
 
         // Reset timers
         TimerTasks.setRunning(false);
-        TimerTasks.setWordborderTimer(CONFIG.getInt("Border.TimeBeforeMoving"));
-
 
         // Reset objectives & gamerules
         RulesEvents.NOTCH_APPLE = CONFIG.getBoolean("NotchApple");
@@ -126,8 +125,7 @@ public final class Terrafunder extends JavaPlugin{
         lines.add(TimerTasks.formatLine(Teams.getColorTeamDef()+"Defenseur", 0));
         lines.add(TimerTasks.formatLine("Attaquant", 0));
         lines.add(SEPARATOR);
-        lines.add(TimerTasks.formatLine("Border", TimerTasks.formatTime(0, false)));
-        lines.add(TimerTasks.formatLine("Size", 0));
+        lines.add(TimerTasks.formatLine("Bordure", 0));
         lines.add(SEPARATOR);
         board.updateLines(lines);
 

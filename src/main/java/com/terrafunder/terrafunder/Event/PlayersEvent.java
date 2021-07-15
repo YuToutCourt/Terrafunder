@@ -31,6 +31,7 @@ public class PlayersEvent implements Listener {
     @EventHandler
     public void playerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
+        if(Teams.getTeamOf(player) != null) Teams.setColorForPlayer(player);
         event.setJoinMessage("§7[§3+§7] " + player.getDisplayName());
         this.main.boards.add(this.main.createBoard(player));
 

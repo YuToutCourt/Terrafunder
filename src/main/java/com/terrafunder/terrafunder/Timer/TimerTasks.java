@@ -14,7 +14,7 @@ public class TimerTasks extends BukkitRunnable {
     public static int day = 1;
     public static int time = 0;
 
-    public static int WBtime = 0;
+    private boolean castleAttack = false;
     private int WBstate = 0;
 
     private Terrafunder main;
@@ -30,21 +30,29 @@ public class TimerTasks extends BukkitRunnable {
 
         if(RUN) {
             time ++;
-            if(WBstate < 2) WBtime --; // changing wb timer only if not finished
-
-            if(WBtime == 0 && WBstate == 0) { // worldborder starts moving
+            if(day >= this.main.CONFIG.getInt("Border.TimeBeforeMoving") && WBstate == 0) { // worldborder starts moving
                 this.moveWorldBorder();
                 WBstate ++;
             }
-            if(WBtime == 0 && WBstate == 1) { // worldborder ends moving
+            if(WBstate == 1) { // worldborder ends moving
                 WBstate ++;
             }
-            if(time%1200 == 0) day++;
+            if(time%1200 == 0) {
+                Bukkit.broadcastMessage("§b------ Fin du jour " + day + " -------");
+                this.main.WORLD.playSound(this.main.WORLD.getSpawnLocation(),  Sound.CAT_MEOW, 1000.0F, 1.0F);
+                day++;
+            }
 
-            if(day == 3 && !this.main.WORLD.getPVP()) { // turn pvp on
+            if(day == 4 && !castleAttack){
+                Bukkit.broadcastMessage("§c------ Attaque du Château Disponible -------");
+                this.main.WORLD.playSound(this.main.WORLD.getSpawnLocation(), Sound.WOLF_GROWL, 1000.0F, 1.0F);
+                castleAttack = true;
+            }
+
+            if(day >= this.main.CONFIG.getInt("TimeBeforePvp") && !this.main.WORLD.getPVP()) { // turn pvp on
                 this.main.WORLD.setPVP(true);
                 this.main.WORLD.playSound(this.main.WORLD.getSpawnLocation(), Sound.WOLF_GROWL, 1000.0F, 1.0F);
-                Bukkit.broadcastMessage("§c§lPvP is now enable!");
+                Bukkit.broadcastMessage("§c------ PVP Actif -------");
             }
         }
 
@@ -54,9 +62,6 @@ public class TimerTasks extends BukkitRunnable {
         RUN = state;
     }
 
-    public static void setWordborderTimer(int minutes) {
-        WBtime = minutes * 60;
-    }
 
     public static String formatTime(int secs, boolean printHour) {
         ChatColor color = RUN ? ChatColor.YELLOW : ChatColor.RED;
@@ -82,9 +87,9 @@ public class TimerTasks extends BukkitRunnable {
             board.updateLine(1, formatTime(time, true));
             board.updateLine(3, formatLine("Jour",day));
             board.updateLine(5, formatLine(Teams.getColorTeamDef()+"Defenseur", Teams.nbDefenseur()));
-            board.updateLine(6, formatLine(Teams.getTeamOf(board.getPlayer()).getColor()+"Attaquant",Teams.nbAttacker()));
-            board.updateLine(8, formatLine("Border", formatTime(WBtime, false)));
-            board.updateLine(9, formatLine("Size", (int)this.main.WORLD.getWorldBorder().getSize()));
+            if(Teams.getTeamOf(board.getPlayer()) == null) board.updateLine(6, formatLine("Attaquant",Teams.nbAttacker()));
+            else board.updateLine(6, formatLine(Teams.getTeamOf(board.getPlayer()).getColor()+"Attaquant",Teams.nbAttacker()));
+            board.updateLine(8, formatLine("Bordure", (int)this.main.WORLD.getWorldBorder().getSize()));
         }
     }
 
@@ -92,7 +97,6 @@ public class TimerTasks extends BukkitRunnable {
         this.main.WORLD.playSound(this.main.WORLD.getSpawnLocation(), Sound.ANVIL_LAND, 1000.0F, 1.0F);
         int endSize = this.main.CONFIG.getInt("Border.EndSize");
         int duration = this.main.CONFIG.getInt("Border.MovingDuration");
-        WBtime = duration;
         this.main.WORLD.getWorldBorder().setSize(endSize, duration);
         Bukkit.broadcastMessage("§c§lBorder is now moving");
     }

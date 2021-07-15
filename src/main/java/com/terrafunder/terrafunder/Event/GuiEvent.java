@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class GuiEvent implements Listener {
+
+    private final static Integer VALUE = 15;
+
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -21,8 +24,17 @@ public class GuiEvent implements Listener {
         if(item == null) return;
         if (item.getType() == Material.CHEST && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Sélecteur de team")){
             Inventory inv = Bukkit.createInventory(null, 45, "§6Sélecteur de team");
-            for(int i = 0; i< Teams.teams.size(); i++){
-                ItemStack banner = new ItemStack(Material.BANNER,1,Teams.teams.get(i).getData());
+            ItemStack glass = newItem(Material.STAINED_GLASS_PANE,1, (byte)(VALUE.byteValue() - Teams.getDataTeamDef()));
+
+            for(int i=0;i<=9;i++) {
+                inv.setItem(i,glass);
+            }
+            inv.setItem(13,newItem(Material.BANNER,1,Teams.getDataTeamDef()));
+            inv.setItem(17,glass);
+
+
+            for(int i = 27; i < 35; i++){
+                ItemStack banner = newItem(Material.BANNER,1,Teams.teams.get(i).getData());
                 ItemMeta itemMeta = banner.getItemMeta();
                 itemMeta.setDisplayName(Teams.teams.get(i).getColor() + "Rejoignez la Team " + Teams.teams.get(i).getName());
                 banner.setItemMeta(itemMeta);
@@ -42,6 +54,7 @@ public class GuiEvent implements Listener {
         if (inv.getName().equalsIgnoreCase("§6Sélecteur de team")) {
             if(current != null && current.getType().equals(Material.BANNER)){
                 for(Teams team : Teams.teams){
+                    // FUCKING DEPRECRATED CODE
                     if (team.getData() == current.getData().getData()){
                         Teams.addPlayer(player,team);
                         player.sendMessage(team.getColor()+ "Tu a rejoin la team " + team.getName());
@@ -51,6 +64,10 @@ public class GuiEvent implements Listener {
             event.setCancelled(true);
         }
 
+    }
+
+    private ItemStack newItem(Material mat,int amount, byte data){
+        return new ItemStack(mat,amount,data);
     }
 
 }

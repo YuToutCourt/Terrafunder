@@ -61,6 +61,15 @@ public class Teams {
         return null;
     }
 
+    public static byte getDataTeamDef(){
+        for(Teams team : teams){
+            if(team.getName().equals("Defenseur")){
+                return team.getData();
+            }
+        }
+        return 0;
+    }
+
     public static int nbAttacker(){
         int nbAtt = 0;
         for(Teams team : teams){

@@ -30,7 +30,7 @@ public class ChatEvent implements Listener {
                 event.setCancelled(true);
                 for(Player p : Bukkit.getOnlinePlayers()){
                     if(Teams.getTeamOf(p).equals(Teams.getTeamOf(playerSender))){
-                        p.sendMessage(Teams.getTeamOf(p).getColor() + "[" + Teams.getTeamOf(p).getName() + "] "+ playerSender.getName()+ "§4 ->"+ Teams.getTeamOf(playerSender).getColor() + formatMessage(message));
+                        p.sendMessage(Teams.getTeamOf(p).getColor() + "[" + Teams.getTeamOf(p).getName() + "] "+ playerSender.getName()+ "§4 -> "+ Teams.getTeamOf(playerSender).getColor() + formatMessage(message));
                     }
                 }
             }
