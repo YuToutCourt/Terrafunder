@@ -25,25 +25,30 @@ public class GuiEvent implements Listener {
         if (item.getType() == Material.CHEST && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equalsIgnoreCase("§6Sélecteur de team")){
             Inventory inv = Bukkit.createInventory(null, 45, "§6Sélecteur de team");
             ItemStack glass = newItem(Material.STAINED_GLASS_PANE,1, (byte)(VALUE.byteValue() - Teams.getDataTeamDef()));
+            ItemStack bannerDef = newItem(Material.BANNER,1,Teams.getDataTeamDef());
+            ItemMeta itemMetaDef = bannerDef.getItemMeta();
+            itemMetaDef.setDisplayName(Teams.getColorTeamDef() + "Rejoignez la Team Defenseur");
+            bannerDef.setItemMeta(itemMetaDef);
 
-            for(int i=0;i<=9;i++) {
-                inv.setItem(i,glass);
-            }
-            inv.setItem(13,newItem(Material.BANNER,1,Teams.getDataTeamDef()));
+            for(int i=0;i<=9;i++) inv.setItem(i,glass);
+            inv.setItem(13,bannerDef);
             inv.setItem(17,glass);
 
-
-            for(int i = 27; i < 35; i++){
-                ItemStack banner = newItem(Material.BANNER,1,Teams.teams.get(i).getData());
-                ItemMeta itemMeta = banner.getItemMeta();
-                itemMeta.setDisplayName(Teams.teams.get(i).getColor() + "Rejoignez la Team " + Teams.teams.get(i).getName());
-                banner.setItemMeta(itemMeta);
-                inv.setItem(i, banner);
+            int index = 27;
+            for(Teams team : Teams.teams){
+                if(!team.getName().equals("Defenseur")){
+                    ItemStack banner = newItem(Material.BANNER,1,team.getData());
+                    ItemMeta itemMeta = banner.getItemMeta();
+                    itemMeta.setDisplayName(team.getColor() + "Rejoignez la Team " + team.getName());
+                    banner.setItemMeta(itemMeta);
+                    inv.setItem(index, banner);
+                    index++;
+                }
             }
             player.openInventory(inv);
         }
-
     }
+
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         Inventory inv = event.getInventory();
