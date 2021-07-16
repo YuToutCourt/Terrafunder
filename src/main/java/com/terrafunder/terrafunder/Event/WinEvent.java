@@ -42,13 +42,11 @@ public class WinEvent implements Listener {
         }
     }
 
-    private void stop()
-    {
-        Location spawn = new Location(Bukkit.getWorld("world"), 0, this.main.WORLD.getHighestBlockYAt(0, 0), 0);
+    private void stop() {
         for (Player player : Bukkit.getOnlinePlayers())
         {
             player.setGameMode(GameMode.SPECTATOR);
-            player.teleport(spawn);
+            player.teleport(this.main.WORLD.getSpawnLocation());
         }
         TimerTasks.RUN = false;
     }
