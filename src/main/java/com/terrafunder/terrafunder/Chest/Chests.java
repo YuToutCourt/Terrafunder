@@ -37,7 +37,7 @@ public class Chests {
 
     private int negativeOrNot(int number){
         Random rand = new Random();
-        int random = rand.nextInt(1);
+        int random = rand.nextInt(2);
         return random == 0 ? number*-1 : number;
     }
 
