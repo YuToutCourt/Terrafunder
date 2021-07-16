@@ -1,5 +1,6 @@
 package com.terrafunder.terrafunder.Timer;
 
+import com.terrafunder.terrafunder.Chest.Chests;
 import com.terrafunder.terrafunder.Team.Teams;
 import com.terrafunder.terrafunder.Terrafunder;
 import fr.mrmicky.fastboard.FastBoard;
@@ -40,6 +41,8 @@ public class TimerTasks extends BukkitRunnable {
             if(time%1200 == 0) {
                 Bukkit.broadcastMessage("§b------ Fin du jour " + day + " -------");
                 this.main.WORLD.playSound(this.main.WORLD.getSpawnLocation(),  Sound.CAT_MEOW, 1000.0F, 1.0F);
+                Chests chest = new Chests(this.main);
+                chest.spawnChest(chest.randomLocation(),chest.randomItem());
                 day++;
             }
 
@@ -98,6 +101,6 @@ public class TimerTasks extends BukkitRunnable {
         int endSize = this.main.CONFIG.getInt("Border.EndSize");
         int duration = this.main.CONFIG.getInt("Border.MovingDuration");
         this.main.WORLD.getWorldBorder().setSize(endSize, duration);
-        Bukkit.broadcastMessage("§c§lBorder is now moving");
+        Bukkit.broadcastMessage("§c------ La Border Réduit -------");
     }
 }

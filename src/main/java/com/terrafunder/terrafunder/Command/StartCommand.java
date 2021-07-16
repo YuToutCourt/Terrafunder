@@ -75,6 +75,15 @@ public class StartCommand implements CommandExecutor {
 
         tpTeam(); // PLS WORK YOU WILL HAVE A COOKIE
 
+        for(Teams team : Teams.teams){
+            if(team.getName().equals("Defenseur")){
+                tpPlayerByTeam(team,this.main.CONFIG.getInt("SpawnDef.x"),this.main.CONFIG.getInt("SpawnDef.z"));
+                break;
+            }
+
+        }
+
+
         this.main.WORLD.setDifficulty(Difficulty.NORMAL);
 
         TimerTasks timer = new TimerTasks(this.main);
@@ -97,7 +106,7 @@ public class StartCommand implements CommandExecutor {
                 if (firstTeam){
                     coordUsed[index][0] = x;
                     coordUsed[index][1] = z;
-                    tpTeam(team,x,z);
+                    tpPlayerByTeam(team,x,z);
                     firstTeam = false;
                 }
                 else {
@@ -107,14 +116,14 @@ public class StartCommand implements CommandExecutor {
                     }
                     coordUsed[index][0] = x;
                     coordUsed[index][1] = z;
-                    tpTeam(team,x,z);
+                    tpPlayerByTeam(team,x,z);
                 }
                 index++;
             }
         }
     }
 
-    private void tpTeam(Teams team, int x, int z){
+    private void tpPlayerByTeam(Teams team, int x, int z){
         Location location = new Location(this.main.WORLD,x,this.main.WORLD.getHighestBlockYAt(x, z)+2,z);
         for(UUID uuid : team.getListOfPlayerInTheTeam()){
             Bukkit.getPlayer(uuid).teleport(location);

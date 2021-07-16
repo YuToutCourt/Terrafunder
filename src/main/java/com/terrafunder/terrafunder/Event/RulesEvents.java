@@ -20,7 +20,7 @@ public class RulesEvents implements Listener {
 
     public static boolean NOTCH_APPLE;
     public static boolean LEVEL_TWO_POTION;
-    public static boolean STRENGHT_POTIONS;
+    public static boolean STRENGTH_POTIONS;
     public static boolean PROJECTILES;
     public static boolean NETHER;
     public static boolean HORSE;
@@ -36,7 +36,7 @@ public class RulesEvents implements Listener {
         if(!itemCrafted.getType().equals(Material.GOLDEN_APPLE)) return;
         if(itemCrafted.getAmount() != 1) return; // 0 = golden apple, 1 = notch apple
 
-        player.sendMessage("§cNotch apples have been disabled");
+        player.sendMessage("§4§l> [SERVEUR] " + player.getName() + "La pomme de Notch à était désactiver");
         event.setCancelled(true);
     }
 
@@ -61,7 +61,7 @@ public class RulesEvents implements Listener {
 
         // Strenght potion
         if(item.equals(Material.BLAZE_POWDER)){
-            if(STRENGHT_POTIONS) return;
+            if(STRENGTH_POTIONS) return;
             event.setCancelled(true);
         }
     }
@@ -81,7 +81,6 @@ public class RulesEvents implements Listener {
         if(!(event.getEntity() instanceof Player)) return; // only Player victims
 
         event.setCancelled(true);
-        attacker.sendMessage("§cProjectiles damages have been disabled");
     }
 
     @EventHandler
@@ -92,7 +91,7 @@ public class RulesEvents implements Listener {
         if(event.getCause() != PlayerPortalEvent.TeleportCause.NETHER_PORTAL) return;
 
         event.setCancelled(true);
-        player.sendMessage("§cNether have been disabled");
+        player.sendMessage("§4§l> [SERVEUR] " + player.getDisplayName() + " Le Nether à était désactiver");
     }
 
     @EventHandler
@@ -102,7 +101,7 @@ public class RulesEvents implements Listener {
         Player player = event.getPlayer();
         if(!(event.getRightClicked() instanceof Horse)) return;
 
-        player.sendMessage("§cHorse have been disabled");
+        player.sendMessage("§4§l> [SERVEUR] " + player.getDisplayName() + "Les chevaux ont était désactiver");
         event.setCancelled(true);
     }
 

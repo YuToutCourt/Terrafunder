@@ -5,7 +5,6 @@ Spawn: # Spawn coordinates ✔️
 
 SpawnDef: # Spawn coordinates for the defenseur
   x: 0   # int x coordinate
-  y: 250 # int y coordinate
   z: 0   # int z coordinate
 
 World: #✔️
@@ -28,14 +27,14 @@ CutClean: true # Enable or not the Cut Clean scenario (autosmelting items) ✔�
 Teams: #✔️
   TeamChat: true # Enable or not team chat
   FriendlyFire : false # Enable or not the friendlyfire
-  Teams: # color,name,data - splitted by comma (The name of the Defenseur tame sould never change)
+  Teams: # color,name,data - splitted by comma (The "Defenseur" team have to have this name = "Defenseur")
     - "GOLD,Orange,14"
     - "YELLOW,Yellow,11"
     - "DARK_GREEN,Dark Green,2"
     - "GREEN,Green,10"
-    - "AQUA,Aqua,12"
+    - "AQUA,Defenseur,12"
     - "BLUE,Blue,4"
-    - "RED,Defenseur,1"
+    - "RED,Red,1"
     - "LIGHT_PURPLE,Pink,9"
     - "DARK_PURPLE,Purple,13"
     - "GRAY,Gray,8"
