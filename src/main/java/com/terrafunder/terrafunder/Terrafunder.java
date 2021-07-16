@@ -44,7 +44,7 @@ public final class Terrafunder extends JavaPlugin{
         pm.registerEvents(new BlockBreakEmerald(),this);
         pm.registerEvents(new DeathEvent(this),this);
         pm.registerEvents(new GuiEvent(),this);
-        pm.registerEvents(new WinEvent(),this);
+        pm.registerEvents(new WinEvent(this),this);
         if(CONFIG.getBoolean("NoobMode")) pm.registerEvents(new CancelDeathEvent(this),this);
         if(CONFIG.getBoolean("CutClean")) pm.registerEvents(new CutCleanEvent(), this);
         if(!CONFIG.getBoolean("World.BadWeather")) pm.registerEvents(new RainEvent(), this);
