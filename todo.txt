@@ -1,13 +1,6 @@
 Todo :
 
-    - Chest
-    + Tout mettre en Français
-    + Rendre jolie le sélecteur de teams
-    + Ajouter le NoonbMode
-    + Finir le /start (Tp player par Team)
-
-
-
+    - return null;
 
 
 §4 -> Dark Red
