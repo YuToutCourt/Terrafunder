@@ -73,6 +73,7 @@ public class PlayersEvent implements Listener {
     @EventHandler
     public void damageEvent(EntityDamageByEntityEvent event) {
         if(!(event.getEntity() instanceof Player))  return;
+        if(!(event.getDamager() instanceof Player)) return;
         if(this.main.CONFIG.getBoolean("Teams.FriendlyFire")) return;
         Player victim = (Player) event.getEntity();
         Player attacker = null;

@@ -19,10 +19,12 @@ public class CancelDeathEvent implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event){
         if(TimerTasks.day < this.main.CONFIG.getInt("TimeBeforePvp")){
-            Player player = (Player) event.getEntity();
-            if (event.getFinalDamage() >= player.getHealth()){
-                event.setCancelled(true);
-                player.sendMessage("§a>[SERVEUR] Le bon dieu vous fait grâce de votre mort");
+            if(event.getEntity() instanceof Player){
+                Player player = (Player) event.getEntity();
+                if (event.getFinalDamage() >= player.getHealth()){
+                    event.setCancelled(true);
+                    player.sendMessage("§a>[SERVEUR] Le bon dieu vous fait grâce de votre mort");
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.terrafunder.terrafunder.Command;
 
+import com.terrafunder.terrafunder.Team.Teams;
 import com.terrafunder.terrafunder.Terrafunder;
 import com.terrafunder.terrafunder.Timer.TimerTasks;
 import org.bukkit.*;
@@ -15,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Random;
 
 public class StartCommand implements CommandExecutor {
 
@@ -41,7 +43,10 @@ public class StartCommand implements CommandExecutor {
         this.main.WORLD.setTime(0);
         int borderSize = (int) this.main.WORLD.getWorldBorder().getSize() / 2;
         this.main.WORLD.setGameRuleValue("doFireTick", this.main.CONFIG.getString("World.EnableFireSpreading"));
-        int invicibilityDuration = this.main.CONFIG.getInt("Invicibility");
+        int invincibilityDuration = this.main.CONFIG.getInt("Invicibility");
+
+        if(!this.main.CONFIG.getBoolean("NaturalRegeneration"))
+            this.main.WORLD.setGameRuleValue("naturalRegeneration", "false");
 
         for(Player player : Bukkit.getOnlinePlayers()){
 
@@ -56,7 +61,7 @@ public class StartCommand implements CommandExecutor {
                 if(player.hasAchievement(a)) player.removeAchievement(a);
             }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*invicibilityDuration, 255));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*invincibilityDuration, 255));
             player.setGameMode(GameMode.SURVIVAL);
             player.setHealth(20);
             player.setFoodLevel(20);
@@ -68,7 +73,9 @@ public class StartCommand implements CommandExecutor {
         for(int i = 0; i < 100; i++) Bukkit.broadcastMessage(" ");
         Bukkit.broadcastMessage(ChatColor.RED +"> §l[SERVEUR] §cPréparation au lancement du §a§lTerrafunder ... ");
 
-        this.main.WORLD.setDifficulty(Difficulty.HARD);
+        tpTeam(); // PLS WORK YOU WILL HAVE A COOKIE
+
+        this.main.WORLD.setDifficulty(Difficulty.NORMAL);
 
         TimerTasks timer = new TimerTasks(this.main);
         timer.runTaskTimer(this.main, 0, 20);
@@ -76,4 +83,60 @@ public class StartCommand implements CommandExecutor {
         timer.run();
         return true;
     }
+
+    private void tpTeam(){
+        Random rand = new Random();
+        boolean firstTeam = true;
+        int coordUsed[][] = new int[Teams.teams.size()][2];
+        int index = 0;
+        int x,z;
+        for(Teams team : Teams.teams){
+            if(!team.getName().equals("Defenseur")){
+                x = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
+                z = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
+                if (firstTeam){
+                    coordUsed[index][0] = x;
+                    coordUsed[index][1] = z;
+                    tpTeam(team,x,z);
+                    firstTeam = false;
+                }
+                else {
+                    while (!checkProximity(x,z,coordUsed)){
+                        x = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
+                        z = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
+                    }
+                    coordUsed[index][0] = x;
+                    coordUsed[index][1] = z;
+                    tpTeam(team,x,z);
+                }
+                index++;
+            }
+        }
+    }
+
+    private void tpTeam(Teams team, int x, int z){
+        Location location = new Location(this.main.WORLD,x,this.main.WORLD.getHighestBlockYAt(x, z)+2,z);
+        for(UUID uuid : team.getListOfPlayerInTheTeam()){
+            Bukkit.getPlayer(uuid).teleport(location);
+        }
+    }
+
+    private int negativeOrNot(int number){
+        Random rand = new Random();
+        int random = rand.nextInt(1);
+        return random == 0 ? number*-1 : number;
+    }
+
+    private boolean checkProximity(int x0,int z0, int listCoord[][]){
+        int count = 0;
+        int x1,z1;
+        for(int i=0;i<listCoord.length;i++){
+            x1 = listCoord[i][0];
+            z1 = listCoord[i][1];
+            if(Math.sqrt(Math.pow((x1 - x0), 2) + Math.pow((z1 - z0), 2)) >= 150) count++;
+        }
+        return count == listCoord.length;
+    }
+
+
 }

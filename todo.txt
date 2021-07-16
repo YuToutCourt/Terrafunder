@@ -3,8 +3,8 @@ Todo :
     - Chest
     - Tout mettre en Français
     + Rendre jolie le sélecteur de teams
-    - Ajouter la difficuler du mode de jeu dans la config
-    - Finir le /start (Tp player par Team)
+    + Ajouter le NoonbMode
+    + Finir le /start (Tp player par Team)
 
 
 
