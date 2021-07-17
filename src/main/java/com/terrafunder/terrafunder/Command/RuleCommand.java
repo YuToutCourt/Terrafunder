@@ -25,6 +25,7 @@ public class RuleCommand implements CommandExecutor {
     public static String FIRE_ENCHANTS;
     public static String CUT_CLEAN;
     public static String FRIENDLY_FIRE;
+    public static String NOOB_MODE;
 
 
     private Terrafunder main;
@@ -76,6 +77,7 @@ public class RuleCommand implements CommandExecutor {
                 sender.sendMessage("> §3Fire spreading: "+ FIRE_SPREADING);
                 sender.sendMessage("> §3Team chat: "+ TEAM_CHAT);
                 sender.sendMessage("> §3Invicibility time: §e"+ INVICIBILITY + " second(s)");
+                sender.sendMessage("> §3Noob mode: "+ NOOB_MODE);
                 return true;
             case 5:
                 sender.sendMessage("§9-----------Page 5/6------------");

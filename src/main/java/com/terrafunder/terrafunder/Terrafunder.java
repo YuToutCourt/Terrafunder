@@ -103,6 +103,8 @@ public final class Terrafunder extends JavaPlugin{
         RuleCommand.FIRE_ENCHANTS = RulesEvents.FIRE_ENCHANTS ? "§aOn" : "§cOff";
         RuleCommand.CUT_CLEAN = CONFIG.getBoolean("CutClean") ? "§aOn" : "§cOff";
         RuleCommand.FRIENDLY_FIRE = CONFIG.getBoolean("Teams.FriendlyFire") ? "§aOn" : "§cOff";
+        RuleCommand.NOOB_MODE = CONFIG.getBoolean("NoobMode") ? "§aOn" : "§cOff";
+
 
         // Reset scoreboard
         for(FastBoard board : this.boards) {
