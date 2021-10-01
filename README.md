@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/Wongt8/Terrafunder/main/img/Terra.png "Banner")
+<img width=400 src="https://raw.githubusercontent.com/Wongt8/Terrafunder/main/img/Terra.png">
 
 
 
@@ -24,7 +24,7 @@ Defender's : As a signe team, protect the **EMERALD BLOCK** from the **attacker'
 * Spigot or Bukkit 1.8.*
 * You need a custom map with a base for the defender's
 
-## Commande in game for admin's
+## In-game commands for admins
 
     # Create a broadcast message
     /alert <message>
@@ -35,7 +35,7 @@ Defender's : As a signe team, protect the **EMERALD BLOCK** from the **attacker'
     # Set the current day to <day>
     /setday <day>
 
-## Commande in game 
+## In-game command 
 
     # Show the rule of the game at <page>
     /rule <1 -> 7>
