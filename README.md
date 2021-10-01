@@ -5,7 +5,7 @@
 # Terrafunder
 <img src="https://img.shields.io/badge/Java-Maven-brightgreen.svg?style=plastic">
 
-Terrafunder is a plugin for Minecraft 1.8.* servers. It allow for players to provide an additional game mode (game mode inspired by SkyDefender)
+Terrafunder is a plugin for Minecraft 1.8.* servers. It allows players to provide an additional game mode (game mode inspired by SkyDefender)
 
 
 
