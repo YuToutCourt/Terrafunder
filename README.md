@@ -43,5 +43,5 @@ Defender's : As a signe team, protect the **EMERALD BLOCK** from the **attacker'
 
 ----
 
-Feel free to give your opinion on the plugin and on what it can be improved
+Feel free to give your opinion about the plugin and on what it can be improved
 
