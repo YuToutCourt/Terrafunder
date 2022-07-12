@@ -3,7 +3,7 @@ Spawn: # Spawn coordinates ✔️
   y: 250 # int y coordinate
   z: 0   # int z coordinate
 
-SpawnDef: # Spawn coordinates for the defenseur
+SpawnDef: # Spawn coordinates for the defender
   x: 0   # int x coordinate
   z: 0   # int z coordinate
 
@@ -27,7 +27,7 @@ CutClean: true # Enable or not the Cut Clean scenario (autosmelting items) ✔�
 Teams: #✔️
   TeamChat: true # Enable or not team chat
   FriendlyFire : false # Enable or not the friendlyfire
-  Teams: # color,name,data - splitted by comma (The "Defenseur" team have to have this name = "Defenseur")
+  Teams: # color,name,data - splitted by comma (The "Defender" team have to have this name = "Defenseur")
     - "GOLD,Orange,14"
     - "YELLOW,Yellow,11"
     - "DARK_GREEN,Dark Green,2"
@@ -40,7 +40,7 @@ Teams: #✔️
     - "GRAY,Gray,8"
 
 Invicibility: 30 # Invicibility time at the start of the game, in seconds ✔️
-TimeBeforePvp: 3 # Time in days before PVP is enable (a day if 20 minutes) ✔️
+TimeBeforePvp: 3 # Time in days before PVP is enable (a day, 20 minutes) ✔️
 
 Border: #✔️
   StartSize: 2000 # Initial size (width) of the border

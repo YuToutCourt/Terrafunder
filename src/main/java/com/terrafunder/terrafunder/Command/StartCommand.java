@@ -101,8 +101,8 @@ public class StartCommand implements CommandExecutor {
         int x,z;
         for(Teams team : Teams.teams){
             if(!team.getName().equals("Defenseur")){
-                x = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
-                z = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
+                x = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2)) + (int)this.main.WORLD.getSpawnLocation().getX();
+                z = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2)) + (int)this.main.WORLD.getSpawnLocation().getZ();
                 if (firstTeam){
                     coordUsed[index][0] = x;
                     coordUsed[index][1] = z;
@@ -111,8 +111,8 @@ public class StartCommand implements CommandExecutor {
                 }
                 else {
                     while (!checkProximity(x,z,coordUsed)){
-                        x = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
-                        z = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2));
+                        x = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2)) + (int)this.main.WORLD.getSpawnLocation().getX();
+                        z = negativeOrNot(rand.nextInt((int)this.main.WORLD.getWorldBorder().getSize() / 2)) + (int)this.main.WORLD.getSpawnLocation().getZ();
                     }
                     coordUsed[index][0] = x;
                     coordUsed[index][1] = z;
