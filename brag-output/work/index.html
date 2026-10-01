@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="fonts/g.css">
+<style>
+  :root {
+    --emerald: #55FF55; --emerald-d: #00AA00; --aqua: #55FFFF; --gold: #FFAA00;
+    --bg: #0a0e14; --ink: #f4f7f2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+  body { font-family: 'Pixelify Sans', monospace; color: var(--ink); }
+  .scene { position: absolute; inset: 0; opacity: 0; overflow: hidden; }
+  .px { font-family: 'Silkscreen', monospace; letter-spacing: 0.02em; }
+  .mc { font-family: 'Pixelify Sans', monospace; text-shadow: 4px 4px 0 rgba(0,0,0,.55); }
+  canvas, img { image-rendering: pixelated; }
+
+  /* 3D pixel cubes */
+  .stage { position: absolute; perspective: 1600px; }
+  .cube { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+  .face { position: absolute; left: 0; top: 0; background-size: 100% 100%; image-rendering: pixelated; backface-visibility: hidden; }
+
+  /* backdrop */
+  #sky { position: absolute; inset: 0; }
+  .grid { position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(85,255,85,.05) 2px, transparent 2px), linear-gradient(90deg, rgba(85,255,85,.05) 2px, transparent 2px);
+    background-size: 64px 64px; }
+
+  /* S1 hook */
+  #s1 .lines { position: absolute; left: 150px; top: 250px; }
+  #s1 .line { font-size: 96px; line-height: 1.18; white-space: nowrap; opacity: 0; }
+
+  /* S2 reveal */
+  #s2 img { position: absolute; left: 50%; top: 70px; height: 700px; transform-origin: 50% 80%; }
+  #s2 .sub { position: absolute; left: 0; right: 0; top: 830px; text-align: center; font-size: 66px; opacity: 0; }
+  #s2 .sub b { color: var(--emerald); font-weight: 700; }
+
+  /* S3 two sides */
+  #s3 .half { position: absolute; top: 0; bottom: 0; width: 50%; padding: 150px 110px 0; }
+  #s3 .def { left: 0; background: linear-gradient(160deg, #06303a, #031418); }
+  #s3 .att { right: 0; background: linear-gradient(200deg, #3a1210, #160606); }
+  #s3 h2 { font-size: 92px; margin-bottom: 26px; }
+  #s3 p { font-size: 60px; line-height: 1.25; }
+  #s3 .vs { position: absolute; left: 50%; top: 50%; width: 170px; height: 170px; margin: -85px 0 0 -85px; background: #0a0e14; border: 8px solid #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 70px; }
+  #s3 .chips { position: absolute; left: 1060px; top: 640px; display: grid; grid-template-columns: repeat(3, 270px); gap: 18px 14px; }
+  #s3 .chip { display: flex; align-items: center; gap: 14px; font-size: 34px; white-space: nowrap; opacity: 0; }
+  #s3 .chip i { width: 52px; height: 52px; display: block; box-shadow: inset -6px -6px 0 rgba(0,0,0,.3), inset 6px 6px 0 rgba(255,255,255,.25); }
+  #s3 .dstage { left: 380px; top: 640px; }
+
+  /* S4 HUD */
+  #land { position: absolute; left: 0; top: 0; }
+  #s4 .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(0,0,0,.1) 60%, rgba(0,0,0,.35)); }
+  #s4 .caption { position: absolute; left: 70px; top: 60px; font-size: 64px; padding: 18px 34px; background: rgba(10,14,20,.82); border-left: 12px solid var(--emerald); }
+  #chat { position: absolute; left: 40px; bottom: 170px; width: 1250px; }
+  #chat .msg { font-size: 36px; line-height: 54px; padding: 0 16px; background: rgba(0,0,0,.5); white-space: nowrap; }
+  #board { position: absolute; right: 50px; top: 270px; width: 470px; background: rgba(0,0,0,.42); font-size: 40px; padding-bottom: 10px; }
+  #board .title { text-align: center; background: rgba(0,0,0,.25); line-height: 64px; font-size: 44px; }
+  #board .row { padding: 0 20px; line-height: 52px; height: 52px; white-space: nowrap; }
+  .hotbar { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); display: flex; border: 6px solid #111; background: rgba(140,140,140,.55); }
+  .hotbar div { width: 92px; height: 92px; border: 4px solid #6b6b6b; display: flex; align-items: center; justify-content: center; }
+  .hotbar div.sel { border-color: #fff; }
+  .hotbar canvas { width: 62px; height: 62px; }
+
+  /* S5 payoff */
+  #s5 .vstage { left: 960px; top: 580px; }
+  #s5 .flash { position: absolute; inset: 0; background: #b9ffb9; opacity: 0; }
+  #s5 .win { position: absolute; left: 0; right: 0; top: 80px; text-align: center; font-size: 78px; font-weight: 700; opacity: 0; }
+  #parts { position: absolute; left: 0; top: 0; }
+
+  /* S6 outro */
+  #s6 img { position: absolute; left: 110px; top: 230px; height: 580px; }
+  #s6 .txt { position: absolute; left: 900px; top: 300px; }
+  #s6 h1 { font-size: 92px; line-height: 1; }
+  #s6 h1 span { color: var(--emerald); }
+  #s6 .t2 { font-size: 46px; margin-top: 34px; color: #cfd8cc; }
+  #s6 .cmd { display: inline-block; margin-top: 40px; font-size: 56px; padding: 14px 30px; background: rgba(0,0,0,.6); border: 4px solid #3b3b3b; }
+  #s6 .url { font-size: 46px; margin-top: 46px; color: var(--aqua); }
+  #s6 .r { opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="sky" width="1920" height="1080"></canvas>
+<div class="grid" id="grid"></div>
+
+<section class="scene" id="s1">
+  <div class="lines px">
+    <div class="line">9 équipes.</div>
+    <div class="line" style="color:var(--aqua)">1 château.</div>
+    <div class="line" style="color:var(--emerald)">1 bloc d'émeraude.</div>
+  </div>
+  <div class="stage" id="hookStage" style="left:1580px; top:540px"></div>
+</section>
+
+<section class="scene" id="s2">
+  <img src="Terra.png" alt="">
+  <div class="sub mc">Un mode de jeu pour serveurs <b>Minecraft 1.8</b></div>
+</section>
+
+<section class="scene" id="s3">
+  <div class="half def">
+    <h2 class="px" style="color:var(--aqua)">Défenseurs</h2>
+    <p class="mc">Défendez le bloc.</p>
+  </div>
+  <div class="half att">
+    <h2 class="px" style="color:#FF5555">Attaquants</h2>
+    <p class="mc">Volez-le.<br>Posez-le sur la bedrock.</p>
+  </div>
+  <div class="stage dstage" id="defStage"></div>
+  <div class="chips" id="chips"></div>
+  <div class="vs px">VS</div>
+</section>
+
+<section class="scene" id="s4">
+  <canvas id="land" width="1920" height="1080"></canvas>
+  <div class="shade"></div>
+  <div class="caption mc">Jours, PvP, coffres, bordure : <span style="color:var(--emerald)">le plugin gère tout.</span></div>
+  <div id="chat" class="mc"></div>
+  <div id="board" class="mc">
+    <div class="title"><span style="color:#00AA00">Terra</span><b style="color:#55FF55">Funder</b></div>
+    <div class="row"></div><div class="row" id="b1"></div><div class="row"></div><div class="row" id="b3"></div><div class="row"></div>
+    <div class="row" id="b5"></div><div class="row" id="b6"></div><div class="row"></div><div class="row" id="b8"></div>
+  </div>
+  <div class="hotbar" id="hotbar"></div>
+</section>
+
+<section class="scene" id="s5">
+  <canvas id="land2" width="1920" height="1080" style="position:absolute;left:0;top:0;filter:brightness(.45) saturate(.8)"></canvas>
+  <div class="stage vstage" id="winStage"></div>
+  <canvas id="parts" width="1920" height="1080"></canvas>
+  <div class="win mc"></div>
+  <div class="flash"></div>
+</section>
+
+<section class="scene" id="s6">
+  <img src="Terra.png" alt="">
+  <div class="txt">
+    <h1 class="px r">Terra<span>funder</span></h1>
+    <div class="t2 mc r">Plugin Spigot / Bukkit · Minecraft 1.8</div>
+    <div class="cmd mc r"><span style="color:#AAAAAA">&gt;</span> /start</div>
+    <div class="url mc r">github.com/YuToutCourt/Terrafunder</div>
+  </div>
+</section>
+
+<script>
+// ---------- helpers ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lin = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = x => 1 - Math.pow(1 - x, 3);
+const eIn = x => x * x * x;
+const eBack = x => { const c = 1.70158, c3 = c + 1; return 1 + c3 * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+const $ = s => document.querySelector(s);
+
+// Minecraft § color codes, as used in the plugin's chat messages
+const MC = { '0':'#000000','1':'#0000AA','2':'#00AA00','3':'#00AAAA','4':'#AA0000','5':'#AA00AA','6':'#FFAA00','7':'#AAAAAA',
+             '8':'#555555','9':'#5555FF','a':'#55FF55','b':'#55FFFF','c':'#FF5555','d':'#FF55FF','e':'#FFFF55','f':'#FFFFFF' };
+function mcHTML(s) {
+  let color = '#FFFFFF', bold = false, out = '';
+  const parts = s.split('§');
+  out += esc(parts[0]);
+  for (let i = 1; i < parts.length; i++) {
+    const c = parts[i][0], rest = parts[i].slice(1);
+    if (MC[c]) { color = MC[c]; bold = false; } else if (c === 'l') bold = true; else if (c === 'r') { color = '#FFFFFF'; bold = false; }
+    if (rest) out += `<span style="color:${color};${bold ? 'font-weight:700' : ''}">${esc(rest)}</span>`;
+  }
+  return out;
+}
+function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+// ---------- pixel textures ----------
+function tex(kind, seed) {
+  const c = document.createElement('canvas'); c.width = c.height = 16;
+  const g = c.getContext('2d'), r = rng(seed);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    let col;
+    if (kind === 'emerald') {
+      const edge = x === 0 || y === 0 || x === 15 || y === 15;
+      const diag = (x + y) % 7 === 0 || (x - y + 16) % 9 === 0;
+      const v = r();
+      col = edge ? '#1f7a3a' : diag ? (v > .5 ? '#b6ffc9' : '#8ff0a8') : (v > .7 ? '#41c46a' : v > .35 ? '#5ad67f' : '#4ccd75');
+    } else if (kind === 'bedrock') {
+      const v = r(); col = ['#2b2b2b','#4a4a4a','#6b6b6b','#878787','#1c1c1c','#575757'][Math.floor(v * 6)];
+    } else if (kind === 'stone') {
+      const v = r(); col = v > .8 ? '#6f6f6f' : v > .3 ? '#8a8a8a' : '#7d7d7d';
+    }
+    g.fillStyle = col; g.fillRect(x, y, 1, 1);
+  }
+  return c;
+}
+const TEX = { emerald: tex('emerald', 7).toDataURL(), bedrock: tex('bedrock', 11).toDataURL() };
+
+function makeCube(parent, size, kind, shade = [1, .8, .62]) {
+  const cube = document.createElement('div'); cube.className = 'cube';
+  const faces = [
+    ['rotateY(0deg)', shade[1]], ['rotateY(90deg)', shade[2]], ['rotateY(180deg)', shade[1]],
+    ['rotateY(-90deg)', shade[2]], ['rotateX(90deg)', shade[0]], ['rotateX(-90deg)', .45]];
+  for (const [rot, b] of faces) {
+    const f = document.createElement('div'); f.className = 'face';
+    f.style.cssText = `width:${size}px;height:${size}px;margin:${-size/2}px 0 0 ${-size/2}px;background-image:url(${TEX[kind]});transform:${rot} translateZ(${size/2}px);filter:brightness(${b})`;
+    cube.appendChild(f);
+  }
+  parent.appendChild(cube); return cube;
+}
+const hookCube = makeCube($('#hookStage'), 300, 'emerald');
+const defCube = makeCube($('#defStage'), 230, 'emerald');
+const bedCube = makeCube($('#winStage'), 260, 'bedrock');
+const winCube = makeCube($('#winStage'), 260, 'emerald');
+
+// ---------- backdrop: night sky ----------
+(() => {
+  const g = $('#sky').getContext('2d');
+  const grd = g.createLinearGradient(0, 0, 0, 1080); grd.addColorStop(0, '#05080d'); grd.addColorStop(1, '#0d1a14');
+  g.fillStyle = grd; g.fillRect(0, 0, 1920, 1080);
+  const r = rng(3);
+  for (let i = 0; i < 140; i++) { g.fillStyle = `rgba(255,255,255,${.15 + r() * .5})`; const s = r() > .9 ? 6 : 3; g.fillRect(Math.floor(r() * 320) * 6, Math.floor(r() * 120) * 6, s, s); }
+})();
+
+// ---------- landscape (S4/S5): blocky hills + the defenders' castle ----------
+function drawLand(cv) {
+  const g = cv.getContext('2d'), B = 24, r = rng(21);
+  const grd = g.createLinearGradient(0, 0, 0, 1080); grd.addColorStop(0, '#6aa6ff'); grd.addColorStop(.6, '#b9d7ff'); grd.addColorStop(1, '#d8e8ff');
+  g.fillStyle = grd; g.fillRect(0, 0, 1920, 1080);
+  g.fillStyle = 'rgba(255,255,255,.85)';
+  for (let i = 0; i < 6; i++) { const x = r() * 1800, y = 60 + r() * 220; g.fillRect(x, y, 200 + r() * 160, 48); g.fillRect(x + 40, y - 24, 120, 24); }
+  const hill = (base, amp, col, top, seed) => {
+    const rr = rng(seed); let h = base;
+    for (let x = 0; x < 1920; x += B) {
+      h += Math.round((rr() - .5) * 2) * B * .5; h = Math.max(base - amp, Math.min(base + amp, h));
+      const yy = Math.round(h / B) * B;
+      g.fillStyle = col; g.fillRect(x, yy, B, 1080 - yy);
+      if (top) { g.fillStyle = top; g.fillRect(x, yy, B, B); }
+    }
+  };
+  hill(640, 90, '#7d9bbd', null, 5);
+  // castle
+  const cx = 960, gy = 720;
+  const wall = (x, y, w, h) => { for (let yy = y; yy < y + h; yy += B) for (let xx = x; xx < x + w; xx += B) { g.fillStyle = r() > .8 ? '#9a9a9a' : r() > .4 ? '#b4b4b4' : '#a8a8a8'; g.fillRect(xx, yy, B, B); } };
+  wall(cx - 300, gy - 216, 600, 216);
+  for (let x = cx - 300; x < cx + 300; x += B * 2) wall(x, gy - 240, B, B);
+  for (const [tx, th] of [[cx - 360, 360], [cx + 264, 360], [cx - 48, 456]]) {
+    wall(tx, gy - th, 96, th);
+    for (let i = 0; i < 5; i++) { g.fillStyle = i % 2 ? '#1e88e5' : '#29a3ff'; g.fillRect(tx - 12 + i * B * .5, gy - th - (i + 1) * B, 120 - i * B, B); }
+  }
+  g.fillStyle = '#202830'; g.fillRect(cx - 48, gy - 120, 96, 120);
+  hill(780, 60, '#7a5533', '#5fae3f', 9);
+}
+drawLand($('#land')); drawLand($('#land2'));
+
+// hotbar with emerald in the selected slot
+(() => {
+  const hb = $('#hotbar');
+  for (let i = 0; i < 9; i++) {
+    const d = document.createElement('div'); if (i === 0) d.className = 'sel';
+    if (i === 0) { const c = tex('emerald', 7); d.appendChild(c); }
+    hb.appendChild(d);
+  }
+})();
+
+// team chips: the nine attacking teams from config.yml
+const TEAMS = [['Orange','#FFAA00'],['Yellow','#FFFF55'],['Dark Green','#00AA00'],['Green','#55FF55'],['Blue','#5555FF'],['Red','#FF5555'],['Pink','#FF55FF'],['Purple','#AA00AA'],['Gray','#AAAAAA']];
+$('#chips').innerHTML = TEAMS.map(([n, c]) => `<div class="chip mc"><i style="background:${c}"></i>${n}</div>`).join('');
+
+// ---------- timeline ----------
+const T = { s1: [0, 3.0], s2: [3.0, 6.5], s3: [6.5, 11.0], s4: [11.0, 16.5], s5: [16.5, 20.0], s6: [20.0, 23.5] };
+function env(t, [a, b], fin = .28, fout = .24, last = false) {
+  if (t < a || t > b) return 0;
+  const i = a === 0 ? 1 : lin(t, a, a + fin);
+  const o = last ? 1 - lin(t, b - .35, b) : 1 - lin(t, b - fout, b);
+  return Math.min(i, o);
+}
+
+// S4 game clock: plugin seconds mapped onto video time
+const G0 = 2280, G1 = 7260;
+const gameTime = t => Math.floor(G0 + (G1 - G0) * lin(t, 11.25, 16.1));
+function chatLog(time) {
+  const msgs = [];
+  const chest = ['Un §c§lGROS §ecoffre est apparu en §fx §6> 412, §fy §6> 71, §fz §6> -238', 'Un coffre §a§lMOYEN §eest apparu en §fx §6>-655, §fy §6> 64, §fz §6> 120'];
+  if (time >= 2400) msgs.push('§b------ Fin du jour 2 -------', chest[0], '§c------ PVP Actif -------');
+  if (time >= 3600) msgs.push('§b------ Fin du jour 3 -------', '§c------ Attaque du Château Disponible -------');
+  if (time >= 4800) msgs.push('§b------ Fin du jour 4 -------', chest[1]);
+  if (time >= 6000) msgs.push('§b------ Fin du jour 5 -------', '§c------ La Border Réduit -------');
+  return msgs;
+}
+// first-appearance video time of each chat line (for slide-in)
+const chatStarts = (() => { const st = []; let prev = 0; for (let f = 0; f <= 23.5 * 30; f++) { const t = f / 30; const n = chatLog(gameTime(t)).length; while (prev < n) { st.push(t); prev++; } } return st; })();
+window.CHAT_STARTS = chatStarts;
+
+function fmtTime(s) {
+  const y = '§e', p = n => String(n).padStart(2, '0');
+  return y + p(Math.floor(s / 3600)) + '§f:' + y + p(Math.floor(s % 3600 / 60)) + '§f:' + y + p(s % 60);
+}
+const line = (k, v, kc = '§6') => `${kc}${k}§f > §e${v}`;
+
+let lastChat = -1;
+window.render = function (t) {
+  // backdrop drift
+  $('#grid').style.transform = `translate(${-(t * 12) % 64}px, ${-(t * 6) % 64}px)`;
+
+  // S1 hook
+  let e = env(t, T.s1); $('#s1').style.opacity = e;
+  if (e) {
+    const L = document.querySelectorAll('#s1 .line');
+    [0.3, 0.9, 1.5].forEach((a, i) => { const k = lin(t, a, a + .3); L[i].style.opacity = k; L[i].style.transform = `translateX(${(1 - eOut(k)) * -60}px)`; });
+    const s = eBack(lin(t, 1.5, 1.95));
+    hookCube.style.transform = `scale(${s}) rotateX(-24deg) rotateY(${30 + t * 70}deg)`;
+  }
+
+  // S2 reveal
+  e = env(t, T.s2); $('#s2').style.opacity = e;
+  if (e) {
+    const k = lin(t, 3.0, 3.55);
+    $('#s2 img').style.transform = `translate(-50%, ${(1 - eOut(k)) * -500}px) scale(${.85 + .15 * eBack(lin(t, 3.4, 3.75))}) scale(${1 + (t - 3.75) * .012})`;
+    const ks = lin(t, 3.65, 3.95);
+    $('#s2 .sub').style.opacity = ks; $('#s2 .sub').style.transform = `translateY(${(1 - eOut(ks)) * 30}px)`;
+  }
+
+  // S3 two sides
+  e = env(t, T.s3); $('#s3').style.opacity = e;
+  if (e) {
+    const kd = eOut(lin(t, 6.6, 7.0)), ka = eOut(lin(t, 7.2, 7.6));
+    $('#s3 .def').style.transform = `translateX(${(1 - kd) * -120}px)`;
+    $('#s3 .att').style.transform = `translateX(${(1 - ka) * 120}px)`;
+    $('#s3 .def h2').style.opacity = $('#s3 .def p').style.opacity = kd;
+    $('#s3 .att h2').style.opacity = $('#s3 .att p').style.opacity = ka;
+    $('#s3 .vs').style.transform = `scale(${eBack(lin(t, 7.0, 7.3))}) rotate(${(1 - lin(t, 7.0, 7.3)) * -45}deg)`;
+    defCube.style.transform = `scale(${eBack(lin(t, 6.8, 7.2))}) rotateX(-22deg) rotateY(${t * 40}deg)`;
+    document.querySelectorAll('#s3 .chip').forEach((c, i) => { const k = lin(t, 7.7 + i * .12, 7.9 + i * .12); c.style.opacity = k; c.style.transform = `translateY(${(1 - eBack(k)) * 24}px)`; });
+  }
+
+  // S4 the plugin in use
+  e = env(t, T.s4); $('#s4').style.opacity = e;
+  if (e) {
+    $('#land').style.transform = `scale(1.08) translateX(${(t - 13.75) * -14}px)`;
+    const gt = gameTime(t), day = 1 + Math.floor(gt / 1200);
+    const border = gt < 6000 ? 2000 : Math.round(2000 - 1500 * Math.min(1, (gt - 6000) / 1200));
+    $('#b1').innerHTML = mcHTML(fmtTime(gt));
+    $('#b3').innerHTML = mcHTML(line('Jour', day));
+    $('#b5').innerHTML = mcHTML(line('Defenseur', 6, '§b'));
+    $('#b6').innerHTML = mcHTML(line('Attaquant', 27 - Math.max(0, day - 3)));
+    $('#b8').innerHTML = mcHTML(line('Bordure', border));
+    const msgs = chatLog(gt);
+    if (msgs.length !== lastChat) { $('#chat').innerHTML = msgs.map(m => `<div class="msg">${mcHTML(m)}</div>`).join(''); lastChat = msgs.length; }
+    document.querySelectorAll('#chat .msg').forEach((m, i) => { const st = chatStarts[i] + .12 * (i - chatStarts.indexOf(chatStarts[i])); const k = lin(t, st, st + .18); m.style.opacity = k; m.style.transform = `translateX(${(1 - eOut(k)) * -40}px)`; });
+    const kc = lin(t, 11.1, 11.45); $('#s4 .caption').style.opacity = kc; $('#s4 .caption').style.transform = `translateY(${(1 - eOut(kc)) * -30}px)`;
+  }
+
+  // S5 payoff: emerald onto bedrock
+  e = env(t, T.s5); $('#s5').style.opacity = e;
+  if (e) {
+    const fall = eIn(lin(t, 16.65, 17.15));
+    const land = 17.15, sh = t > land ? Math.max(0, 1 - (t - land) / .35) : 0;
+    const shake = sh * 14 * Math.sin(t * 90);
+    const rot = `rotateX(-24deg) rotateY(${-38 + (t - 16.5) * 6}deg)`;
+    bedCube.style.transform = `translate(${shake}px, ${130}px) ${rot}`;
+    winCube.style.transform = `translate(${shake}px, ${-130 - (1 - fall) * 900}px) ${rot}`;
+    $('#s5 .flash').style.opacity = t > land ? .55 * Math.max(0, 1 - (t - land) / .3) : 0;
+    // particles
+    const g = $('#parts').getContext('2d'); g.clearRect(0, 0, 1920, 1080);
+    if (t > land) {
+      const r = rng(99), dt = t - land;
+      for (let i = 0; i < 70; i++) {
+        const a = r() * Math.PI * 2, v = 300 + r() * 700, life = .6 + r() * .7;
+        if (dt > life) continue;
+        const x = 960 + Math.cos(a) * v * dt, y = 580 + Math.sin(a) * v * dt * .6 + 900 * dt * dt;
+        g.globalAlpha = 1 - dt / life; g.fillStyle = r() > .5 ? '#55FF55' : '#b6ffc9';
+        const s = 10 + Math.floor(r() * 3) * 6; g.fillRect(Math.round(x / 6) * 6, Math.round(y / 6) * 6, s, s);
+      }
+      g.globalAlpha = 1;
+    }
+    const kw = lin(t, 17.35, 17.6);
+    const w = $('#s5 .win'); if (!w.innerHTML) w.innerHTML = mcHTML('§c§l> [SERVEUR] VICTOIRE DE LA TEAM : §cRed');
+    w.style.opacity = kw; w.style.transform = `scale(${.8 + .2 * eBack(kw)})`;
+  }
+
+  // S6 outro
+  e = env(t, T.s6, .28, .24, true); $('#s6').style.opacity = e;
+  if (e) {
+    const k = eOut(lin(t, 20.0, 20.45));
+    $('#s6 img').style.transform = `translateX(${(1 - k) * -80}px) scale(${.92 + .08 * k})`;
+    document.querySelectorAll('#s6 .r').forEach((el, i) => { const kk = lin(t, 20.2 + i * .22, 20.5 + i * .22); el.style.opacity = kk; el.style.transform = `translateY(${(1 - eOut(kk)) * 24}px)`; });
+  }
+};
+window.READY = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = r))));
+</script>
+</body>
+</html>

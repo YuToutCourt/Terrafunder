@@ -1,0 +1,1 @@
+9 équipes, 1 château, 1 bloc d'émeraude. Terrafunder est un plugin Minecraft 1.8 (Spigot/Bukkit) : une équipe défend le bloc, les autres doivent le voler et le poser sur la bedrock. Jours, PvP, coffres et bordure se gèrent tout seuls, il suffit de lancer /start. github.com/YuToutCourt/Terrafunder
